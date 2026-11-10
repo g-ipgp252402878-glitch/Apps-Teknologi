@@ -1,0 +1,1181 @@
+!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pengembaraan Hutan: Misi Menyelamatkan Sahabat</title>
+<style>
+  :root {
+    --primary-green: #1b4332;
+    --forest-mid: #2d6a4f;
+    --light-green: #52b788;
+    --accent-yellow: #ffb703;
+    --accent-gold: #fb8500;
+    --sand-color: #fefae0;
+    --rose-color: #f43f5e;
+    --sky-blue: #48cae4;
+    --dark-cave: #0d1b2a;
+    --text-dark: #1e293b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+  body {
+    background: linear-gradient(135deg, #143224, #1b4332, #0f241a);
+    color: var(--text-dark);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+  }
+  .app-container {
+    width: 100%;
+    max-width: 980px;
+    background: #ffffff;
+    border-radius: 28px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.35);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 650px;
+    border: 5px solid var(--accent-yellow);
+  }
+  header {
+    background: linear-gradient(90deg, #143224, #1b4332, #2d6a4f);
+    color: white;
+    padding: 14px 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 4px solid var(--accent-yellow);
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  header h1 {
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #fef08a;
+    font-weight: 800;
+  }
+  .nav-buttons { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .btn {
+    background: var(--accent-yellow);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-weight: 800;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: 0.2s;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    color: #1e293b;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn:hover { transform: translateY(-2px); background: #fca311; }
+  .btn-primary { background: #2d6a4f; color: white; }
+  .btn-primary:hover { background: #1b4332; }
+  .btn-music { background: #0f766e; color: #fef08a; border: 1px solid #2dd4bf; }
+  .btn-music.active { background: #f59e0b; color: #1e293b; animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } }
+
+  .voice-banner {
+    background: linear-gradient(90deg, #064e3b, #0f766e);
+    color: white;
+    padding: 12px 18px;
+    border-radius: 18px;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    border: 2px solid #34d399;
+  }
+  .screen { display: none; padding: 25px; flex-direction: column; align-items: center; flex: 1; background: #fdfbf7; overflow-y: auto; }
+  .screen.active { display: flex; }
+
+  .hero-box {
+    background: linear-gradient(135deg, #1b4332, #2d6a4f, #155e75);
+    color: white;
+    padding: 24px;
+    border-radius: 22px;
+    width: 100%;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    border: 3px solid #facc15;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 14px;
+    width: 100%;
+  }
+  .menu-card {
+    background: white;
+    padding: 18px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    cursor: pointer;
+    transition: 0.25s;
+    border-left: 6px solid #2d6a4f;
+    border-top: 1px solid #e2e8f0;
+    border-right: 1px solid #e2e8f0;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .menu-card:hover { transform: translateY(-4px); background: #f0fdf4; border-left-color: #fbbf24; }
+
+  /* Studio styling */
+  .studio-layout { display: flex; flex-wrap: wrap; gap: 24px; width: 100%; }
+  .preview-col {
+    flex: 1; min-width: 260px; max-width: 340px;
+    background: linear-gradient(180deg, #ecfdf5, #fef3c7);
+    padding: 20px; border-radius: 20px; border: 3px solid #6ee7b7;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .form-col { flex: 2; min-width: 300px; display: flex; flex-direction: column; gap: 14px; }
+  .form-group label { display: block; font-size: 0.82rem; font-weight: 800; color: #166534; margin-bottom: 6px; text-transform: uppercase; }
+  .form-group input, .form-group select {
+    width: 100%; padding: 10px 14px; border: 2px solid #cbd5e1; border-radius: 12px; font-size: 0.95rem; font-weight: 600; background: #fff;
+  }
+  .palette-bar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .color-circle {
+    width: 34px; height: 34px; border-radius: 50%; border: 2px solid #94a3b8; cursor: pointer; transition: 0.2s;
+  }
+  .color-circle.selected { transform: scale(1.18); border-color: #0f172a; box-shadow: 0 0 0 3px #f59e0b; }
+  .paw-pill {
+    padding: 6px 12px; border-radius: 50px; border: 2px solid #cbd5e1; font-size: 0.8rem; font-weight: 700;
+    cursor: pointer; display: flex; align-items: center; gap: 6px; background: #fff;
+  }
+  .paw-pill.selected { border-color: #0f172a; background: #fef08a; box-shadow: 0 2px 6px rgba(0,0,0,0.15); transform: scale(1.05); }
+
+  /* Storybook theater */
+  .book-stage {
+    width: 100%;
+    aspect-ratio: 16/9;
+    max-height: 480px;
+    background: #000;
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    border: 5px solid #d97706;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  }
+  .book-dialogue-bar {
+    position: absolute; bottom: 8px; left: 10px; right: 10px;
+    background: rgba(255, 253, 247, 0.96);
+    padding: 12px 18px; border-radius: 16px; border: 2px solid #b45309;
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  }
+
+  /* Quiz and activities */
+  .quiz-option {
+    width: 100%; padding: 14px; border-radius: 14px; border: 2px solid #cbd5e1; background: #fff;
+    margin-bottom: 8px; text-align: left; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: 0.2s;
+  }
+  .quiz-option:hover { background: #f8fafc; border-color: #64748b; }
+  .quiz-option.correct { background: #dcfce7; border-color: #22c55e; color: #14532d; font-weight: 800; }
+  .quiz-option.wrong { background: #fee2e2; border-color: #ef4444; color: #7f1d1d; }
+
+  /* Certificate */
+  .cert-frame {
+    background: #fff; border: 10px solid #f59e0b; border-radius: 22px; padding: 30px; text-align: center;
+    width: 100%; max-width: 720px; box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  }
+</style>
+</head>
+<body>
+
+<div class="app-container">
+  <!-- HEADER -->
+  <header>
+    <h1>🌲 Pengembaraan Hutan: Misi Menyelamatkan Sahabat</h1>
+    <div class="nav-buttons">
+      <button class="btn" onclick="navigateTo('screen-home')">🏠 Utama</button>
+      <button class="btn btn-music" id="bgmBtn" onclick="toggleMusic()">🎶 Pasang Muzik</button>
+      <button class="btn btn-primary" onclick="navigateTo('screen-studio')">🐯 Studio Watak</button>
+      <button class="btn" onclick="navigateTo('screen-video')">🎬 Video 7 Babak</button>
+      <button class="btn" onclick="navigateTo('screen-quiz')">🧩 Kuiz</button>
+      <button class="btn" onclick="navigateTo('screen-cave')">🚪 Misi Gua</button>
+    </div>
+  </header>
+
+  <!-- PANDUAN SUARA PERISIAN BANNER -->
+  <div style="padding: 16px 20px 0 20px;">
+    <div class="voice-banner">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <span style="font-size:1.6rem;">🦜</span>
+        <div>
+          <strong style="color:#fde047; font-size:0.85rem; text-transform:uppercase;">Cikgu Rimba (Suara Panduan):</strong>
+          <p id="voiceText" style="font-size:0.92rem; margin-top:2px;">"Selamat datang ke Pengembaraan Hutan! Mari belajar nilai empati dan persahabatan bersama wira haiwan!"</p>
+        </div>
+      </div>
+      <button class="btn" style="background:#fde047; color:#0f172a;" onclick="speakCurrentInstruction()">🔊 Dengar Suara</button>
+    </div>
+  </div>
+
+  <!-- 1. HALAMAN UTAMA -->
+  <div id="screen-home" class="screen active">
+    <div class="hero-box">
+      <div style="flex:1; min-width:280px;">
+        <span style="background:#fef08a; color:#1e293b; font-size:0.75rem; font-weight:800; padding:4px 10px; border-radius:50px;">MISI PERSAHABATAN & EMPATI</span>
+        <h2 style="font-size:1.8rem; font-weight:900; color:#fde047; margin:8px 0;">Selamat Datang ke Hutan Rimba Cahaya!</h2>
+        <p style="font-size:0.95rem; line-height:1.6; color:#e2e8f0; margin-bottom:14px;">Bantu wira haiwan mengharungi rintangan, memahami perasaan Pak Beruang, dan menyelamatkan sahabat sejati melalui kuasa empati!</p>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn" style="background:#facc15; font-size:0.95rem; padding:10px 20px;" onclick="navigateTo('screen-studio')">Mula Cipta Watak 🚀</button>
+          <button class="btn btn-music" onclick="toggleMusic()">🎵 Muzik Latar Rimba</button>
+        </div>
+      </div>
+      <div style="background:rgba(0,0,0,0.35); padding:16px; border-radius:20px; border:2px solid #facc15; text-align:center;">
+        <div style="font-size:0.75rem; font-weight:800; color:#fef08a; margin-bottom:8px;">GANDINGAN SAHABAT SEMASA</div>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div id="homeHeroAvatar"></div>
+          <span style="font-size:1.6rem;">💖</span>
+          <div id="homeFriendAvatar"></div>
+        </div>
+        <div style="margin-top:8px; font-size:0.85rem; font-weight:800; color:#fff;" id="homeDuoNames">Sang Belang & Kancil Ceria</div>
+      </div>
+    </div>
+
+    <div class="menu-grid">
+      <div class="menu-card" onclick="navigateTo('screen-studio')">
+        <div>
+          <span style="font-size:2rem;">🐯</span>
+          <h3 style="font-size:1.1rem; font-weight:800; margin:6px 0;">1. Studio Cipta Wira</h3>
+          <p style="font-size:0.85rem; color:#475569;">Pilih haiwan, warna bulu, dan warna tapak tangan (paws) kegemaran anda.</p>
+        </div>
+        <span style="color:#15803d; font-weight:800; font-size:0.85rem; margin-top:10px;">Buka Studio ➔</span>
+      </div>
+      <div class="menu-card" onclick="navigateTo('screen-book')">
+        <div>
+          <span style="font-size:2rem;">📔</span>
+          <h3 style="font-size:1.1rem; font-weight:800; margin:6px 0;">2. Buku Kenangan Sahabat</h3>
+          <p style="font-size:0.85rem; color:#475569;">Catat kenangan indah, pelekat diari comel, dan ikrar janji setia persahabatan.</p>
+        </div>
+        <span style="color:#15803d; font-weight:800; font-size:0.85rem; margin-top:10px;">Tulis Kenangan ➔</span>
+      </div>
+      <div class="menu-card" onclick="navigateTo('screen-video')">
+        <div>
+          <span style="font-size:2rem;">🎬</span>
+          <h3 style="font-size:1.1rem; font-weight:800; margin:6px 0;">3. Teater Video 7 Babak</h3>
+          <p style="font-size:0.85rem; color:#475569;">Buku cerita bergambar rimba dengan dialog audio penuh dalam Bahasa Melayu.</p>
+        </div>
+        <span style="color:#15803d; font-weight:800; font-size:0.85rem; margin-top:10px;">Tonton Kisah ➔</span>
+      </div>
+      <div class="menu-card" onclick="navigateTo('screen-quiz')">
+        <div>
+          <span style="font-size:2rem;">🧩</span>
+          <h3 style="font-size:1.1rem; font-weight:800; margin:6px 0;">4. Kuiz Nilai Murni</h3>
+          <p style="font-size:0.85rem; color:#475569;">Uji kematangan sosial dan sikap empati melalui 5 soalan interaktif.</p>
+        </div>
+        <span style="color:#15803d; font-weight:800; font-size:0.85rem; margin-top:10px;">Mula Kuiz ➔</span>
+      </div>
+      <div class="menu-card" onclick="navigateTo('screen-cave')">
+        <div>
+          <span style="font-size:2rem;">🚪</span>
+          <h3 style="font-size:1.1rem; font-weight:800; margin:6px 0;">5. Gua Masalah Terpendam</h3>
+          <p style="font-size:0.85rem; color:#475569;">Sematkan 3 Kunci Empati untuk membuka pintu gua dan selamatkan kawan.</p>
+        </div>
+        <span style="color:#15803d; font-weight:800; font-size:0.85rem; margin-top:10px;">Jalankan Misi ➔</span>
+      </div>
+      <div class="menu-card" onclick="navigateTo('screen-cert')">
+        <div>
+          <span style="font-size:2rem;">🏆</span>
+          <h3 style="font-size:1.1rem; font-weight:800; margin:6px 0;">6. Sijil Sahabat Hebat</h3>
+          <p style="font-size:0.85rem; color:#475569;">Terima pengiktirafan rasmi dan cetak sijil kebanggaan persahabatan anda.</p>
+        </div>
+        <span style="color:#15803d; font-weight:800; font-size:0.85rem; margin-top:10px;">Lihat Sijil ➔</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. STUDIO WATAK (DENGAN TAPAK TANGAN BOLEH DIUBAH WARNA) -->
+  <div id="screen-studio" class="screen">
+    <h2 style="font-size:1.6rem; font-weight:900; color:#1b4332; margin-bottom:14px;">🎨 Studio Cipta Wira & Sahabat</h2>
+    <div class="studio-layout">
+      <!-- Live Preview -->
+      <div class="preview-col">
+        <span style="font-size:0.8rem; font-weight:800; color:#166534; text-transform:uppercase; margin-bottom:8px;">Pratonton Wira Anda</span>
+        <div id="heroPreviewBox" style="cursor:pointer;" onclick="playAnimalSfx(heroData.type)"></div>
+        <h3 id="heroPreviewName" style="font-size:1.3rem; font-weight:900; color:#1b4332; margin-top:8px;">Sang Belang Wira</h3>
+        <span style="background:#2d6a4f; color:#fff; font-size:0.75rem; font-weight:800; padding:3px 10px; border-radius:50px; margin-top:4px;" id="heroPreviewTrait">Pemberani & Setia</span>
+        <p style="font-size:0.8rem; font-style:italic; text-align:center; margin-top:10px; color:#475569;">Tekan wira untuk dengar bunyi haiwan!</p>
+      </div>
+
+      <!-- Controls -->
+      <div class="form-col">
+        <div class="form-group">
+          <label>Nama Wira Anda:</label>
+          <input type="text" id="heroNameInput" value="Sang Belang Wira" oninput="updateHeroName(this.value)">
+        </div>
+
+        <div class="form-group">
+          <label>Pilih Haiwan Wira:</label>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="btn" onclick="setHeroAnimal('tiger')">🐯 Harimau</button>
+            <button class="btn" onclick="setHeroAnimal('cat')">🐱 Kucing</button>
+            <button class="btn" onclick="setHeroAnimal('rabbit')">🐰 Arnab</button>
+            <button class="btn" onclick="setHeroAnimal('bear')">🐻 Beruang</button>
+            <button class="btn" onclick="setHeroAnimal('panda')">🐼 Panda</button>
+            <button class="btn" onclick="setHeroAnimal('fox')">🦊 Musang</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Pilih Warna Bulu Wira:</label>
+          <div class="palette-bar" id="heroColorPalette"></div>
+        </div>
+
+        <!-- PILIHAN WARNA TAPAK TANGAN (PAWS) SEPERTI DIMINTA -->
+        <div class="form-group" style="background:#fef3c7; padding:12px; border-radius:14px; border:2px solid #fcd34d;">
+          <label style="color:#78350f;">🐾 Pilih Warna Tapak Tangan (Paws & Toe Beans):</label>
+          <div class="palette-bar" id="heroPawPalette"></div>
+        </div>
+
+        <div class="form-group">
+          <label>Aksesori Istimewa:</label>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="btn" onclick="setHeroAccessory('bandana')">🧣 Bandana Merah</button>
+            <button class="btn" onclick="setHeroAccessory('crown')">👑 Mahkota Emas</button>
+            <button class="btn" onclick="setHeroAccessory('glasses')">👓 Kacamata</button>
+            <button class="btn" onclick="setHeroAccessory('flower')">🌸 Bunga Rimba</button>
+            <button class="btn" onclick="setHeroAccessory('none')">Tiada</button>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:10px; margin-top:8px;">
+          <button class="btn btn-primary" style="flex:1; padding:12px;" onclick="navigateTo('screen-friend-studio')">Seterusnya: Cipta Sahabat Sejati ➔</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2B. STUDIO SAHABAT -->
+  <div id="screen-friend-studio" class="screen">
+    <h2 style="font-size:1.6rem; font-weight:900; color:#be123c; margin-bottom:14px;">💖 Studio Sahabat Baik</h2>
+    <div class="studio-layout">
+      <div class="preview-col" style="background:#fff1f2; border-color:#fda4af;">
+        <span style="font-size:0.8rem; font-weight:800; color:#9f1239; text-transform:uppercase; margin-bottom:8px;">Sahabat Yang Akan Diselamatkan</span>
+        <div id="friendPreviewBox" style="cursor:pointer;" onclick="playAnimalSfx(friendData.type)"></div>
+        <h3 id="friendPreviewName" style="font-size:1.3rem; font-weight:900; color:#881337; margin-top:8px;">Sang Kancil Ceria</h3>
+        <span style="background:#e11d48; color:#fff; font-size:0.75rem; font-weight:800; padding:3px 10px; border-radius:50px; margin-top:4px;">Paling Ikhlas & Ceria</span>
+      </div>
+
+      <div class="form-col">
+        <div class="form-group">
+          <label style="color:#9f1239;">Nama Sahabat Baik:</label>
+          <input type="text" id="friendNameInput" value="Sang Kancil Ceria" oninput="updateFriendName(this.value)">
+        </div>
+
+        <div class="form-group">
+          <label style="color:#9f1239;">Pilih Bentuk Haiwan Sahabat:</label>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="btn" onclick="setFriendAnimal('cat')">🐱 Kucing</button>
+            <button class="btn" onclick="setFriendAnimal('rabbit')">🐰 Arnab</button>
+            <button class="btn" onclick="setFriendAnimal('panda')">🐼 Panda</button>
+            <button class="btn" onclick="setFriendAnimal('fox')">🦊 Musang</button>
+            <button class="btn" onclick="setFriendAnimal('tiger')">🐯 Harimau</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label style="color:#9f1239;">Pilih Warna Bulu Sahabat:</label>
+          <div class="palette-bar" id="friendColorPalette"></div>
+        </div>
+
+        <!-- PILIHAN WARNA TAPAK TANGAN SAHABAT -->
+        <div class="form-group" style="background:#ffe4e6; padding:12px; border-radius:14px; border:2px solid #fda4af;">
+          <label style="color:#881337;">🐾 Pilih Warna Tapak Tangan Sahabat (Paws):</label>
+          <div class="palette-bar" id="friendPawPalette"></div>
+        </div>
+
+        <div style="display:flex; gap:10px; margin-top:8px;">
+          <button class="btn btn-primary" style="flex:1; padding:12px;" onclick="navigateTo('screen-video')">Simpan & Mula Tonton Teater Video ➔</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. TEATER BUKU CERITA BERGAMBAR 7 BABAK -->
+  <div id="screen-video" class="screen">
+    <div style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-bottom:10px;">
+      <h2 style="font-size:1.4rem; font-weight:900; color:#1b4332;" id="chapterTitle">Babak 1: Keriangan di Hutan Rimba Cahaya</h2>
+      <span style="font-size:0.85rem; font-weight:800; background:#fef08a; padding:4px 12px; border-radius:50px;" id="pageIndicator">Babak 1 / 7</span>
+    </div>
+
+    <!-- Panggung Cerita Bergambar -->
+    <div class="book-stage">
+      <div id="stageBg" style="width:100%; height:100%;"></div>
+
+      <!-- Karakter Atas Pentas -->
+      <div style="position:absolute; bottom:80px; left:30px; display:flex; flex-direction:column; align-items:center;" id="stageHero"></div>
+      <div style="position:absolute; bottom:80px; left:45%; transform:translateX(-50%); display:none; flex-direction:column; align-items:center;" id="stageBear"></div>
+      <div style="position:absolute; bottom:80px; right:30px; display:flex; flex-direction:column; align-items:center;" id="stageFriend"></div>
+
+      <!-- Kotak Dialog Bawah -->
+      <div class="book-dialogue-bar">
+        <div style="flex:1;">
+          <span style="background:#2d6a4f; color:#fff; font-size:0.75rem; font-weight:800; padding:3px 8px; border-radius:6px;" id="speakerTag">Pencerita</span>
+          <p id="dialogueText" style="font-size:0.95rem; font-weight:700; color:#1e293b; margin-top:4px;">Pada suatu pagi yang indah di Hutan Rimba Cahaya...</p>
+        </div>
+        <button class="btn" style="background:#fde047;" onclick="speakCurrentDialogue()">🔊 Dengar</button>
+        <button class="btn btn-primary" onclick="nextDialogue()">Seterusnya ➔</button>
+      </div>
+    </div>
+
+    <!-- Butang Babak 1 hingga 7 -->
+    <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:14px; justify-content:center;">
+      <button class="btn" onclick="jumpChapter(0)">Babak I</button>
+      <button class="btn" onclick="jumpChapter(1)">Babak II</button>
+      <button class="btn" onclick="jumpChapter(2)">Babak III</button>
+      <button class="btn" onclick="jumpChapter(3)">Babak IV</button>
+      <button class="btn" onclick="jumpChapter(4)">Babak V</button>
+      <button class="btn" onclick="jumpChapter(5)">Babak VI</button>
+      <button class="btn" onclick="jumpChapter(6)">Babak VII</button>
+    </div>
+  </div>
+
+  <!-- 4. BUKU KENANGAN SAHABAT -->
+  <div id="screen-book" class="screen">
+    <h2 style="font-size:1.6rem; font-weight:900; color:#1b4332; margin-bottom:12px;">📔 Buku Kenangan Persahabatan Sejati</h2>
+    <div style="background:#fff; border:3px solid #f59e0b; border-radius:20px; padding:20px; width:100%; max-width:760px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; border-bottom:2px dashed #cbd5e1; padding-bottom:12px;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div id="bookPolaroidHero"></div>
+          <span style="font-size:1.5rem;">📸</span>
+          <div id="bookPolaroidFriend"></div>
+        </div>
+        <div>
+          <span style="font-size:0.8rem; font-weight:800; color:#b45309;">PELEKAT TERPILIH:</span>
+          <div style="font-size:1.1rem; font-weight:800; color:#15803d;" id="activeStickerDisplay">💖 Sahabat Sejati</div>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-bottom:12px;">
+        <label>Pilih Pelekat Kenangan:</label>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn" onclick="setSticker('🌟 Bintang Sahabat')">🌟 Bintang</button>
+          <button class="btn" onclick="setSticker('💖 Sahabat Sejati')">💖 Sahabat</button>
+          <button class="btn" onclick="setSticker('🐾 Rimba Bersaudara')">🐾 Rimba</button>
+          <button class="btn" onclick="setSticker('🍀 Bertuah')">🍀 Bertuah</button>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-bottom:12px;">
+        <label>Kenangan Paling Manis Bersama:</label>
+        <input type="text" id="memoryInput" value="Waktu sama-sama bermain buaian dan berkongsi makanan di padang rimba.">
+      </div>
+
+      <div class="form-group" style="margin-bottom:12px;">
+        <label>Janji Sahabat Sejati (Ikrar):</label>
+        <input type="text" id="promiseInput" value="Sentiasa mendengar luahan rakan, tidak akan mengejek, dan saling memaafkan.">
+      </div>
+
+      <button class="btn btn-primary" style="width:100%; padding:12px;" onclick="saveMemory()">Simpan Diari & Teruskan ➔</button>
+    </div>
+  </div>
+
+  <!-- 5. KUIZ NILAI MURNI -->
+  <div id="screen-quiz" class="screen">
+    <div style="width:100%; max-width:680px; background:#fff; padding:24px; border-radius:22px; border:3px solid #2dd4bf; box-shadow:0 8px 20px rgba(0,0,0,0.06);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <span style="font-size:0.85rem; font-weight:800; color:#0f766e;" id="quizCounter">Soalan 1 daripada 5</span>
+        <span style="font-size:1rem; font-weight:900; color:#b45309;" id="quizScoreText">Skor: ⭐⭐⭐⭐⭐</span>
+      </div>
+      <h3 style="font-size:1.15rem; font-weight:900; color:#1e293b; margin-bottom:16px;" id="quizQuestionText">Soalan Kuiz</h3>
+      <div id="quizOptionsContainer"></div>
+      <div id="quizFeedbackBox" style="margin-top:14px; padding:12px; border-radius:12px; display:none;"></div>
+      <button class="btn btn-primary" id="quizNextBtn" style="width:100%; margin-top:14px; display:none;" onclick="nextQuizQuestion()">Soalan Seterusnya ➔</button>
+    </div>
+  </div>
+
+  <!-- 6. GUA MASALAH TERPENDAM -->
+  <div id="screen-cave" class="screen">
+    <h2 style="font-size:1.6rem; font-weight:900; color:#1e293b; margin-bottom:12px;">🚪 Gua Masalah Terpendam Pak Beruang</h2>
+    <div style="width:100%; max-width:760px; background:#0d1b2a; color:#fff; border:4px solid #f59e0b; border-radius:24px; padding:22px; text-align:center;">
+      <div style="display:flex; justify-content:space-around; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:16px;">
+        <div id="caveHero"></div>
+        <div style="background:rgba(255,255,255,0.1); padding:16px; border-radius:20px; border:2px dashed #facc15;">
+          <div style="font-size:3rem;" id="caveDoorLock">🔒</div>
+          <p id="caveDoorStatus" style="font-weight:800; color:#fde047; margin-top:6px;">Pintu Gua Masih Terkunci</p>
+        </div>
+        <div id="caveFriend"></div>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.06); padding:14px; border-radius:16px; margin-bottom:16px; text-align:left;">
+        <h4 style="color:#fde047; font-weight:800; margin-bottom:6px;">Tekan 3 Kunci Hati Empati Untuk Membuka Pintu Gua:</h4>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:10px;">
+          <button class="btn" id="key1Btn" onclick="unlockKey(1)">👂 1. Kunci Mendengar Luahan</button>
+          <button class="btn" id="key2Btn" onclick="unlockKey(2)">💬 2. Kunci Kata Semangat</button>
+          <button class="btn" id="key3Btn" onclick="unlockKey(3)">🤝 3. Kunci Pelukan Kasih</button>
+        </div>
+      </div>
+
+      <button class="btn" id="caveCompleteBtn" style="background:#22c55e; color:#fff; font-size:1rem; padding:12px 24px; display:none;" onclick="navigateTo('screen-cert')">🎉 Sahabat Berjaya Diselamatkan! Tuntut Sijil ➔</button>
+    </div>
+  </div>
+
+  <!-- 7. SIJIL SAHABAT HEBAT -->
+  <div id="screen-cert" class="screen">
+    <div class="cert-frame">
+      <div style="display:flex; justify-content:center; align-items:center; gap:8px; margin-bottom:8px;">
+        <span>✨</span>
+        <span style="font-weight:800; font-size:0.85rem; color:#15803d; letter-spacing:1px; text-transform:uppercase;">Akademi Rimba Cahaya</span>
+        <span>✨</span>
+      </div>
+      <h2 style="font-size:1.8rem; font-weight:900; color:#1b4332; text-transform:uppercase; margin-bottom:6px;">Sijil Sahabat Sejati & Wira Rimba</h2>
+      <p style="font-size:0.85rem; color:#64748b; margin-bottom:18px;">Pentauliahan Khas Kejayaan Menyelamatkan Sahabat Melalui Kuasa Empati</p>
+
+      <div style="display:flex; justify-content:center; align-items:center; gap:20px; margin:16px 0;">
+        <div>
+          <div id="certHeroAvatar"></div>
+          <strong style="color:#1b4332; display:block; margin-top:4px;" id="certHeroName">Sang Belang</strong>
+          <span style="font-size:0.75rem; color:#64748b;">Wira Penyelamat</span>
+        </div>
+        <span style="font-size:2rem; color:#f43f5e;">💖</span>
+        <div>
+          <div id="certFriendAvatar"></div>
+          <strong style="color:#be123c; display:block; margin-top:4px;" id="certFriendName">Sang Kancil</strong>
+          <span style="font-size:0.75rem; color:#64748b;">Sahabat Sejati</span>
+        </div>
+      </div>
+
+      <p style="font-size:0.9rem; line-height:1.6; color:#334155; margin:14px auto; max-width:540px;">
+        Telah berjaya membuktikan keikhlasan persahabatan, menjadi pendengar setia kepada Pak Beruang, dan memahami bahawa kasih sayang sejati mampu menyelesaikan apa jua rintangan emosi.
+      </p>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:24px; border-top:2px solid #e2e8f0; padding-top:14px;">
+        <div style="text-align:left; font-size:0.8rem; color:#64748b;">
+          Tarikh: <strong style="color:#0f172a;" id="certDate"></strong>
+        </div>
+        <div style="width:60px; height:60px; border-radius:50%; background:linear-gradient(135deg, #facc15, #b45309); color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:0.6rem; font-weight:900; border:2px solid #fef08a;">
+          <span>SEAL</span>
+          <span>RASMI</span>
+        </div>
+        <div style="text-align:right; font-size:0.8rem; color:#64748b;">
+          Pengesahan: <strong style="color:#15803d;">Majlis Rimba Harmoni</strong>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:10px; margin-top:16px;">
+      <button class="btn btn-primary" onclick="window.print()">🖨️ Cetak / Simpan PDF</button>
+      <button class="btn" onclick="navigateTo('screen-home')">Kembali ke Menu Utama</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // --- DATA KEADAAN WATAK ---
+  const heroData = {
+    name: 'Sang Belang Wira',
+    type: 'tiger',
+    color: '#f4a261',
+    pawColor: '#ffffff', // Warna tapak tangan
+    accessory: 'bandana',
+    trait: 'Pemberani & Setia'
+  };
+
+  const friendData = {
+    name: 'Sang Kancil Ceria',
+    type: 'cat',
+    color: '#ffb4a2',
+    pawColor: '#fbcfe8', // Warna tapak tangan
+    accessory: 'flower'
+  };
+
+  const COLOR_CHOICES = ['#f4a261', '#e76f51', '#2a9d8f', '#e9ecef', '#8d5b4c', '#f77f00', '#ffffff', '#457b9d'];
+  const PAW_CHOICES = [
+    { color: '#ffffff', label: 'Putih Gebu' },
+    { color: '#fbcfe8', label: 'Merah Jambu' },
+    { color: '#fef08a', label: 'Kuning Madu' },
+    { color: '#fed7aa', label: 'Oren Pic' },
+    { color: '#bae6fd', label: 'Biru Awan' },
+    { color: '#b45309', label: 'Coklat' },
+    { color: '#334155', label: 'Kelabu' }
+  ];
+
+  // --- SVG ANIMAL AVATAR GENERATOR (DENGAN WARNA TAPAK TANGAN & TOE BEANS) ---
+  function renderAvatarSvg(type, color, pawColor, accessory, size = 110, isSad = false, isTrapped = false) {
+    const baseColor = color || '#f4a261';
+    const paw = pawColor || '#ffffff';
+    const toeBean = (paw === '#fbcfe8' || paw === '#f43f5e') ? '#ffffff' : '#f43f5e';
+
+    let ears = '';
+    if (type === 'rabbit') {
+      ears = `<ellipse cx="40" cy="22" rx="10" ry="28" fill="${baseColor}" stroke="#cbd5e1" stroke-width="2" transform="rotate(-10 40 22)" />
+              <ellipse cx="40" cy="22" rx="5" ry="18" fill="#f472b6" transform="rotate(-10 40 22)" />
+              <ellipse cx="80" cy="22" rx="10" ry="28" fill="${baseColor}" stroke="#cbd5e1" stroke-width="2" transform="rotate(10 80 22)" />
+              <ellipse cx="80" cy="22" rx="5" ry="18" fill="#f472b6" transform="rotate(10 80 22)" />`;
+    } else if (type === 'cat' || type === 'fox') {
+      ears = `<polygon points="25,50 38,15 55,44" fill="${baseColor}" stroke="#b45309" stroke-width="2" />
+              <polygon points="32,44 40,24 50,40" fill="#fbcfe8" />
+              <polygon points="95,50 82,15 65,44" fill="${baseColor}" stroke="#b45309" stroke-width="2" />
+              <polygon points="88,44 80,24 70,40" fill="#fbcfe8" />`;
+    } else {
+      // Round teddy / tiger / panda ears
+      ears = `<circle cx="32" cy="36" r="16" fill="${type === 'panda' ? '#0f172a' : baseColor}" stroke="#451a03" stroke-width="2" />
+              <circle cx="32" cy="36" r="8" fill="#fde68a" />
+              <circle cx="88" cy="36" r="16" fill="${type === 'panda' ? '#0f172a' : baseColor}" stroke="#451a03" stroke-width="2" />
+              <circle cx="88" cy="36" r="8" fill="#fde68a" />`;
+    }
+
+    let accSvg = '';
+    if (accessory === 'bandana') {
+      accSvg = `<polygon points="36,88 84,88 60,110" fill="#ef4444" stroke="#991b1b" stroke-width="1.5" />
+                <circle cx="60" cy="94" r="2.5" fill="#fff" />`;
+    } else if (accessory === 'crown') {
+      accSvg = `<polygon points="40,38 44,20 52,30 60,16 68,30 76,20 80,38" fill="#fbbf24" stroke="#d97706" stroke-width="1.5" />`;
+    } else if (accessory === 'flower') {
+      accSvg = `<circle cx="80" cy="40" r="4.5" fill="#f43f5e" /><circle cx="80" cy="40" r="2" fill="#fde047" />`;
+    } else if (accessory === 'glasses') {
+      accSvg = `<circle cx="48" cy="62" r="10" stroke="#2563eb" stroke-width="2.5" fill="none" />
+                <circle cx="72" cy="62" r="10" stroke="#2563eb" stroke-width="2.5" fill="none" />
+                <line x1="58" y1="62" x2="62" y2="62" stroke="#2563eb" stroke-width="2.5" />`;
+    }
+
+    const cageSvg = isTrapped ? `<rect x="10" y="10" width="100" height="100" rx="14" fill="rgba(15,23,42,0.4)" />
+                                 <line x1="30" y1="15" x2="30" y2="105" stroke="#94a3b8" stroke-width="4" />
+                                 <line x1="60" y1="15" x2="60" y2="105" stroke="#94a3b8" stroke-width="4" />
+                                 <line x1="90" y1="15" x2="90" y2="105" stroke="#94a3b8" stroke-width="4" />` : '';
+
+    return `
+      <svg width="${size}" height="${size}" viewBox="0 0 120 120" style="display:block;">
+        ${ears}
+        <!-- Chubby Head -->
+        <circle cx="60" cy="68" r="38" fill="${baseColor}" stroke="#0f172a" stroke-width="2" />
+        <!-- Cheeks -->
+        <circle cx="36" cy="72" r="6" fill="#fb7185" opacity="0.75" />
+        <circle cx="84" cy="72" r="6" fill="#fb7185" opacity="0.75" />
+        <!-- Chubby Muzzle -->
+        <ellipse cx="60" cy="74" rx="18" ry="13" fill="#ffffff" />
+        <circle cx="60" cy="70" r="3.5" fill="#0f172a" />
+        ${isSad ? `<path d="M 54 80 Q 60 75 66 80" stroke="#0f172a" stroke-width="2.5" fill="none" />`
+                : `<path d="M 54 77 Q 57 82 60 78 Q 63 82 66 77" stroke="#0f172a" stroke-width="2" fill="none" />`}
+        <!-- Sparkling Kawaii Eyes -->
+        <ellipse cx="46" cy="60" rx="6" ry="7" fill="#0f172a" />
+        <circle cx="44" cy="58" r="2.5" fill="#ffffff" />
+        <ellipse cx="74" cy="60" rx="6" ry="7" fill="#0f172a" />
+        <circle cx="72" cy="58" r="2.5" fill="#ffffff" />
+
+        <!-- TAPAK TANGAN DEPAN (PAWS & TOE BEANS) DENGAN WARNA BOLEH DIUBAH -->
+        <!-- Tapak Kiri -->
+        <ellipse cx="42" cy="102" rx="11" ry="8" fill="${paw}" stroke="#64748b" stroke-width="1.5" />
+        <circle cx="38" cy="100" r="2" fill="${toeBean}" />
+        <circle cx="42" cy="98" r="2" fill="${toeBean}" />
+        <circle cx="46" cy="100" r="2" fill="${toeBean}" />
+        <ellipse cx="42" cy="103" rx="4" ry="2.5" fill="${toeBean}" opacity="0.8" />
+
+        <!-- Tapak Kanan -->
+        <ellipse cx="78" cy="102" rx="11" ry="8" fill="${paw}" stroke="#64748b" stroke-width="1.5" />
+        <circle cx="74" cy="100" r="2" fill="${toeBean}" />
+        <circle cx="78" cy="98" r="2" fill="${toeBean}" />
+        <circle cx="82" cy="100" r="2" fill="${toeBean}" />
+        <ellipse cx="78" cy="103" rx="4" ry="2.5" fill="${toeBean}" opacity="0.8" />
+
+        ${accSvg}
+        ${cageSvg}
+      </svg>
+    `;
+  }
+
+  // --- RE-RENDER ALL AVATARS ACROSS APP ---
+  function refreshAvatars() {
+    const heroSvg = renderAvatarSvg(heroData.type, heroData.color, heroData.pawColor, heroData.accessory, 120);
+    const heroMiniSvg = renderAvatarSvg(heroData.type, heroData.color, heroData.pawColor, heroData.accessory, 65);
+    const friendSvg = renderAvatarSvg(friendData.type, friendData.color, friendData.pawColor, friendData.accessory, 120);
+    const friendMiniSvg = renderAvatarSvg(friendData.type, friendData.color, friendData.pawColor, friendData.accessory, 65);
+
+    document.getElementById('homeHeroAvatar').innerHTML = heroMiniSvg;
+    document.getElementById('homeFriendAvatar').innerHTML = friendMiniSvg;
+    document.getElementById('homeDuoNames').innerText = `${heroData.name} & ${friendData.name}`;
+
+    document.getElementById('heroPreviewBox').innerHTML = heroSvg;
+    document.getElementById('friendPreviewBox').innerHTML = friendSvg;
+
+    document.getElementById('stageHero').innerHTML = `${heroMiniSvg}<span style="background:#fff; font-size:0.75rem; font-weight:800; padding:2px 8px; border-radius:50px; margin-top:2px;">${heroData.name}</span>`;
+    document.getElementById('stageFriend').innerHTML = `${friendMiniSvg}<span style="background:#fff; font-size:0.75rem; font-weight:800; padding:2px 8px; border-radius:50px; margin-top:2px;">${friendData.name}</span>`;
+    document.getElementById('stageBear').innerHTML = `${renderAvatarSvg('bear', '#78350f', '#573e31', 'none', 70, true)}<span style="background:#000; color:#fef08a; font-size:0.75rem; font-weight:800; padding:2px 8px; border-radius:50px; margin-top:2px;">Pak Beruang</span>`;
+
+    document.getElementById('bookPolaroidHero').innerHTML = heroMiniSvg;
+    document.getElementById('bookPolaroidFriend').innerHTML = friendMiniSvg;
+
+    document.getElementById('caveHero').innerHTML = `${heroSvg}<strong style="color:#fde047; display:block; margin-top:4px;">${heroData.name}</strong>`;
+    document.getElementById('caveFriend').innerHTML = `${renderAvatarSvg(friendData.type, friendData.color, friendData.pawColor, friendData.accessory, 120, !allKeysUnlocked, !allKeysUnlocked)}<strong style="color:#f43f5e; display:block; margin-top:4px;">${friendData.name}</strong>`;
+
+    document.getElementById('certHeroAvatar').innerHTML = heroMiniSvg;
+    document.getElementById('certFriendAvatar').innerHTML = friendMiniSvg;
+    document.getElementById('certHeroName').innerText = heroData.name;
+    document.getElementById('certFriendName').innerText = friendData.name;
+  }
+
+  // --- INITIALIZE PALETTES ---
+  function initPalettes() {
+    // Hero Fur Color
+    const hColBox = document.getElementById('heroColorPalette');
+    hColBox.innerHTML = '';
+    COLOR_CHOICES.forEach(c => {
+      const btn = document.createElement('div');
+      btn.className = 'color-circle' + (heroData.color === c ? ' selected' : '');
+      btn.style.backgroundColor = c;
+      btn.onclick = () => { heroData.color = c; refreshAvatars(); initPalettes(); playSoundClick(); };
+      hColBox.appendChild(btn);
+    });
+
+    // Hero Paw Color
+    const hPawBox = document.getElementById('heroPawPalette');
+    hPawBox.innerHTML = '';
+    PAW_CHOICES.forEach(p => {
+      const btn = document.createElement('div');
+      btn.className = 'paw-pill' + (heroData.pawColor === p.color ? ' selected' : '');
+      btn.innerHTML = `<span style="width:14px; height:14px; border-radius:50%; background:${p.color}; border:1px solid #94a3b8; display:inline-block;"></span> ${p.label}`;
+      btn.onclick = () => { heroData.pawColor = p.color; refreshAvatars(); initPalettes(); playSoundClick(); };
+      hPawBox.appendChild(btn);
+    });
+
+    // Friend Fur Color
+    const fColBox = document.getElementById('friendColorPalette');
+    fColBox.innerHTML = '';
+    COLOR_CHOICES.forEach(c => {
+      const btn = document.createElement('div');
+      btn.className = 'color-circle' + (friendData.color === c ? ' selected' : '');
+      btn.style.backgroundColor = c;
+      btn.onclick = () => { friendData.color = c; refreshAvatars(); initPalettes(); playSoundClick(); };
+      fColBox.appendChild(btn);
+    });
+
+    // Friend Paw Color
+    const fPawBox = document.getElementById('friendPawPalette');
+    fPawBox.innerHTML = '';
+    PAW_CHOICES.forEach(p => {
+      const btn = document.createElement('div');
+      btn.className = 'paw-pill' + (friendData.pawColor === p.color ? ' selected' : '');
+      btn.innerHTML = `<span style="width:14px; height:14px; border-radius:50%; background:${p.color}; border:1px solid #94a3b8; display:inline-block;"></span> ${p.label}`;
+      btn.onclick = () => { friendData.pawColor = p.color; refreshAvatars(); initPalettes(); playSoundClick(); };
+      fPawBox.appendChild(btn);
+    });
+  }
+
+  function setHeroAnimal(t) { heroData.type = t; refreshAvatars(); playAnimalSfx(t); }
+  function setHeroAccessory(a) { heroData.accessory = a; refreshAvatars(); playSoundClick(); }
+  function updateHeroName(val) { heroData.name = val; document.getElementById('heroPreviewName').innerText = val; refreshAvatars(); }
+
+  function setFriendAnimal(t) { friendData.type = t; refreshAvatars(); playAnimalSfx(t); }
+  function setFriendAccessory(a) { friendData.accessory = a; refreshAvatars(); playSoundClick(); }
+  function updateFriendName(val) { friendData.name = val; document.getElementById('friendPreviewName').innerText = val; refreshAvatars(); }
+
+  // --- AUDIO SYNTHESIZER (MUZIK & SFX) ---
+  let audioCtx = null;
+  let isMusicPlaying = false;
+  let bgmInterval = null;
+
+  function initAudio() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+  }
+
+  function playSoundClick() {
+    try {
+      initAudio();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(520, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(320, audioCtx.currentTime + 0.08);
+      gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.09);
+    } catch(e) {}
+  }
+
+  function playAnimalSfx(type) {
+    try {
+      initAudio();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      if (type === 'tiger' || type === 'bear') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(140, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.3);
+      } else {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(650, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(850, audioCtx.currentTime + 0.15);
+      }
+      gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.35);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.36);
+    } catch(e) {}
+  }
+
+  function toggleMusic() {
+    initAudio();
+    const btn = document.getElementById('bgmBtn');
+    if (isMusicPlaying) {
+      isMusicPlaying = false;
+      clearInterval(bgmInterval);
+      btn.classList.remove('active');
+      btn.innerText = '🎶 Pasang Muzik';
+    } else {
+      isMusicPlaying = true;
+      btn.classList.add('active');
+      btn.innerText = '🔊 Muzik Rimba: Aktif';
+
+      const notes = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25]; // C, D, E, G, A, C5
+      let step = 0;
+      bgmInterval = setInterval(() => {
+        if (!isMusicPlaying) return;
+        const pattern = [0, 2, 4, 3, 2, 5, 4, 1];
+        const freq = notes[pattern[step % pattern.length]];
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.38);
+        step++;
+      }, 340);
+    }
+  }
+
+  // --- SUARA PERISIAN (SPEECH SYNTHESIS) ---
+  function speakText(text) {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'ms-MY';
+      utterance.rate = 0.94;
+      utterance.pitch = 1.05;
+      window.speechSynthesis.speak(utterance);
+    }
+  }
+
+  function speakCurrentInstruction() {
+    const text = document.getElementById('voiceText').innerText;
+    speakText(text);
+  }
+
+  // --- 7 BABAK BUKU CERITA (TEATER) ---
+  const STORY_SCENES = [
+    {
+      id: 1, title: 'Babak 1: Keriangan di Hutan Rimba Cahaya',
+      speaker: 'Pencerita',
+      text: 'Pada suatu pagi yang cerah di Hutan Rimba Cahaya, Sang Belang Wira dan sahabat akrabnya sedang riang bermain kejar-kejar di tepi sungai jernih.',
+      bgSvg: `<svg width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 600 340">
+        <defs><linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#bbf7d0"/></linearGradient></defs>
+        <rect width="600" height="340" fill="url(#g1)"/>
+        <circle cx="520" cy="60" r="45" fill="#fde047" opacity="0.9"/>
+        <path d="M 0 200 Q 150 140 300 190 Q 450 240 600 180 L 600 340 L 0 340 Z" fill="#22c55e"/>
+        <path d="M 0 240 Q 200 200 400 250 Q 500 270 600 230 L 600 340 L 0 340 Z" fill="#15803d"/>
+      </svg>`
+    },
+    {
+      id: 2, title: 'Babak 2: Awan Kelabu & Tangisan Pak Beruang',
+      speaker: 'Pak Beruang',
+      text: 'Tiba-tiba guruh berdentum dan awan kelabu menutupi langit. Muncul Pak Beruang yang menangis teresak-esak kerana memikul beban kesunyian.',
+      bgSvg: `<svg width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 600 340">
+        <rect width="600" height="340" fill="#334155"/>
+        <path d="M 0 220 Q 200 180 400 230 L 600 210 L 600 340 L 0 340 Z" fill="#1e293b"/>
+      </svg>`
+    },
+    {
+      id: 3, title: 'Babak 3: Sahabat Terperangkap di Dalam Gua',
+      speaker: 'Sahabat',
+      text: 'Kerana panik dan bimbang, sahabat wira terperangkap di sebalik jeriji besi Gua Masalah Terpendam! Pintu gua tertutup rapat!',
+      bgSvg: `<svg width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 600 340">
+        <rect width="600" height="340" fill="#0f172a"/>
+        <circle cx="300" cy="170" r="110" fill="#1e293b"/>
+      </svg>`
+    },
+    {
+      id: 4, title: 'Babak 4: Wira Mencari Jalan Menyelamat',
+      speaker: 'Wira',
+      text: 'Wira tidak berputus asa! Wira tahu kekerasan fizikal tidak akan membuka pintu gua, tetapi kebaikan hati dan empati!',
+      bgSvg: `<svg width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 600 340">
+        <rect width="600" height="340" fill="#1e293b"/>
+      </svg>`
+    },
+    {
+      id: 5, title: 'Babak 5: Tiga Kunci Hati Empati Ditemui',
+      speaker: 'Pencerita',
+      text: 'Wira menemui Tiga Kunci Empati: Kunci Telinga Mendengar, Kunci Kata Semangat, dan Kunci Pelukan Kasih Sahabat.',
+      bgSvg: `<svg width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 600 340">
+        <rect width="600" height="340" fill="#064e3b"/>
+      </svg>`
+    },
+    {
+      id: 6, title: 'Babak 6: Merawat Kesedihan Pak Beruang',
+      speaker: 'Pak Beruang',
+      text: 'Wira duduk mendengar rintihan Pak Beruang dengan penuh sabar. Hati Pak Beruang kini berasa lapang, tenang dan dihargai!',
+      bgSvg: `<svg width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 600 340">
+        <rect width="600" height="340" fill="#047857"/>
+      </svg>`
+    },
+    {
+      id: 7, title: 'Babak 7: Pintu Terbuka & Sahabat Bebas!',
+      speaker: 'Pencerita',
+      text: 'Jeriji besi terbuka luas! Sahabat berjaya diselamatkan dan seluruh Hutan Rimba Cahaya bersorak riang meraikan kemenangan persahabatan sejati!',
+      bgSvg: `<svg width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 600 340">
+        <defs><linearGradient id="rainbow" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#f43f5e"/><stop offset="50%" stop-color="#facc15"/><stop offset="100%" stop-color="#38bdf8"/></linearGradient></defs>
+        <rect width="600" height="340" fill="#e0f2fe"/>
+        <path d="M 50 250 A 250 180 0 0 1 550 250" stroke="url(#rainbow)" stroke-width="20" fill="none" opacity="0.6"/>
+        <path d="M 0 240 Q 200 200 400 240 L 600 220 L 600 340 L 0 340 Z" fill="#22c55e"/>
+      </svg>`
+    }
+  ];
+
+  let currentChapterIdx = 0;
+
+  function loadChapter(idx) {
+    currentChapterIdx = idx;
+    const scene = STORY_SCENES[idx];
+    document.getElementById('chapterTitle').innerText = scene.title;
+    document.getElementById('pageIndicator').innerText = `Babak ${idx + 1} / 7`;
+    document.getElementById('stageBg').innerHTML = scene.bgSvg;
+    document.getElementById('speakerTag').innerText = scene.speaker;
+
+    // Gantikan nama wira & sahabat dalam teks
+    const formatted = scene.text
+      .replace('Sang Belang Wira', heroData.name)
+      .replace('sahabat akrabnya', heroData.name + ' dan ' + friendData.name)
+      .replace('sahabat wira', friendData.name);
+
+    document.getElementById('dialogueText').innerText = formatted;
+
+    const bearEl = document.getElementById('stageBear');
+    if (idx === 1 || idx === 5) {
+      bearEl.style.display = 'flex';
+    } else {
+      bearEl.style.display = 'none';
+    }
+    refreshAvatars();
+  }
+
+  function nextDialogue() {
+    if (currentChapterIdx < STORY_SCENES.length - 1) {
+      loadChapter(currentChapterIdx + 1);
+      speakCurrentDialogue();
+    } else {
+      navigateTo('screen-quiz');
+    }
+  }
+
+  function jumpChapter(idx) {
+    loadChapter(idx);
+    playSoundClick();
+  }
+
+  function speakCurrentDialogue() {
+    const text = document.getElementById('dialogueText').innerText;
+    speakText(text);
+  }
+
+  // --- KUIZ PERSAHABATAN ---
+  const QUIZ_LIST = [
+    {
+      q: 'Apakah tindakan terbaik apabila melihat kawan baik anda duduk bersendirian dan menangis?',
+      options: [
+        { text: 'Duduk di sampingnya dengan lembut dan mendengar luahannya.', correct: true, exp: 'Tepat sekali! Menjadi pendengar empati memberi kelegaan jiwa.' },
+        { text: 'Ketawakan dia dan beritahu murid lain dia cengeng.', correct: false, exp: 'Mengejek kawan akan melukakan perasaannya.' },
+        { text: 'Pura-pura tidak nampak dan pergi bermain bola.', correct: false, exp: 'Kawan sejati sentiasa peka terhadap kesedihan rakan.' }
+      ]
+    },
+    {
+      q: 'Jika kawan baik anda tidak sengaja merosakkan pensel anda dan meminta maaf, apakah sikap anda?',
+      options: [
+        { text: 'Memaafkannya dengan ikhlas dan mencari jalan penyelesaian.', correct: true, exp: 'Hebat! Sifat pemaaf ialah tiang utama persahabatan.' },
+        { text: 'Membalas dendam dan patahkan pensel dia pula.', correct: false, exp: 'Dendam merosakkan persahabatan yang telah lama terjalin.' },
+        { text: 'Menghasut kawan lain supaya memulaukannya.', correct: false, exp: 'Memulau rakan adalah amalan buli sosial yang tidak baik.' }
+      ]
+    },
+    {
+      q: 'Kawan anda sukar memahami kerja sekolah. Bagaimanakah cara anda membantu?',
+      options: [
+        { text: 'Mengajak mengulang kaji bersama dan menerangkan bahagian yang difahami.', correct: true, exp: 'Sangat baik! Berkongsi ilmu mengukuhkan persahabatan.' },
+        { text: 'Memperlekehkan kemampuannya di hadapan guru.', correct: false, exp: 'Setiap murid mempunyai kelebihan masing-masing.' },
+        { text: 'Menyuruhnya memberi wang saku sebagai upah ajar.', correct: false, exp: 'Persahabatan sejati tidak mengambil kesempatan.' }
+      ]
+    },
+    {
+      q: 'Bagaimanakah Wira menyelesaikan masalah dengan Pak Beruang dalam cerita tadi?',
+      options: [
+        { text: 'Mendengar keluhan hatinya dengan penuh sabar dan empati.', correct: true, exp: 'Tepat! Pak Beruang cuma mahukan perhatian dan kasih sayang.' },
+        { text: 'Menggunakan kekerasan dan pedang untuk menundukkannya.', correct: false, exp: 'Kekerasan tidak dapat menyembuhkan luka emosi.' },
+        { text: 'Mengurung Pak Beruang di tempat yang lebih gelap.', correct: false, exp: 'Mengasingkan orang yang bersedih menambah penderitaan mereka.' }
+      ]
+    },
+    {
+      q: 'Apakah erti sebenar "Sahabat Sejati"?',
+      options: [
+        { text: 'Kawan yang sentiasa menyokong, jujur dan setia pada waktu senang mahupun susah.', correct: true, exp: 'Syabas! Itulah intipati sebenar persahabatan sejati.' },
+        { text: 'Kawan yang hanya mencari kita sewaktu kita mempunyai mainan baharu.', correct: false, exp: 'Itu kawan ketika senang sahaja.' },
+        { text: 'Kawan yang memaksa kita mengikut semua kehendaknya.', correct: false, exp: 'Persahabatan mestilah ada sikap saling bertolak ansur.' }
+      ]
+    }
+  ];
+
+  let currentQuizIdx = 0;
+  let quizScore = 0;
+
+  function loadQuiz(idx) {
+    currentQuizIdx = idx;
+    const qData = QUIZ_LIST[idx];
+    document.getElementById('quizCounter').innerText = `Soalan ${idx + 1} daripada ${QUIZ_LIST.length}`;
+    document.getElementById('quizQuestionText').innerText = qData.q;
+    const optBox = document.getElementById('quizOptionsContainer');
+    optBox.innerHTML = '';
+
+    const feedBox = document.getElementById('quizFeedbackBox');
+    feedBox.style.display = 'none';
+    document.getElementById('quizNextBtn').style.display = 'none';
+
+    qData.options.forEach((opt, oIdx) => {
+      const btn = document.createElement('button');
+      btn.className = 'quiz-option';
+      btn.innerText = opt.text;
+      btn.onclick = () => answerQuiz(oIdx);
+      optBox.appendChild(btn);
+    });
+  }
+
+  function answerQuiz(chosenIdx) {
+    const qData = QUIZ_LIST[currentQuizIdx];
+    const buttons = document.querySelectorAll('.quiz-option');
+    buttons.forEach((btn, idx) => {
+      btn.disabled = true;
+      if (qData.options[idx].correct) {
+        btn.classList.add('correct');
+      } else if (idx === chosenIdx) {
+        btn.classList.add('wrong');
+      }
+    });
+
+    const isCorrect = qData.options[chosenIdx].correct;
+    const feedBox = document.getElementById('quizFeedbackBox');
+    feedBox.style.display = 'block';
+
+    if (isCorrect) {
+      quizScore++;
+      feedBox.style.background = '#dcfce7';
+      feedBox.style.color = '#14532d';
+      feedBox.innerHTML = `<strong>✨ Tahniah! Jawapan Tepat!</strong><p>${qData.options[chosenIdx].exp}</p>`;
+      speakText('Tahniah! Jawapan anda tepat. ' + qData.options[chosenIdx].exp);
+    } else {
+      feedBox.style.background = '#fee2e2';
+      feedBox.style.color = '#7f1d1d';
+      feedBox.innerHTML = `<strong>💡 Renungan:</strong><p>${qData.options[chosenIdx].exp}</p>`;
+      speakText('Kurang tepat. ' + qData.options[chosenIdx].exp);
+    }
+
+    document.getElementById('quizScoreText').innerText = 'Skor: ' + '⭐'.repeat(quizScore) + '☆'.repeat(QUIZ_LIST.length - quizScore);
+    document.getElementById('quizNextBtn').style.display = 'block';
+  }
+
+  function nextQuizQuestion() {
+    if (currentQuizIdx < QUIZ_LIST.length - 1) {
+      loadQuiz(currentQuizIdx + 1);
+    } else {
+      navigateTo('screen-cave');
+    }
+  }
+
+  // --- GUA MASALAH TERPENDAM ---
+  let unlockedKeys = { 1: false, 2: false, 3: false };
+  let allKeysUnlocked = false;
+
+  function unlockKey(id) {
+    unlockedKeys[id] = true;
+    document.getElementById(`key${id}Btn`).style.background = '#22c55e';
+    document.getElementById(`key${id}Btn`).style.color = '#fff';
+    playSoundClick();
+
+    if (unlockedKeys[1] && unlockedKeys[2] && unlockedKeys[3]) {
+      allKeysUnlocked = true;
+      document.getElementById('caveDoorLock').innerText = '🔓';
+      document.getElementById('caveDoorStatus').innerText = '✨ Pintu Gua Terbuka Luas!';
+      document.getElementById('caveCompleteBtn').style.display = 'inline-block';
+      refreshAvatars();
+      speakText('Hebat! Semua Kunci Empati berjaya dibuka dan kawan baik anda kini bebas!');
+    } else {
+      speakText(`Kunci nombor ${id} berjaya disematkan! Hati Pak Beruang semakin tenang.`);
+    }
+  }
+
+  // --- BUKU KENANGAN ---
+  function setSticker(stk) {
+    document.getElementById('activeStickerDisplay').innerText = stk;
+    playSoundClick();
+  }
+
+  function saveMemory() {
+    playSoundClick();
+    speakText('Kenangan persahabatan anda telah berjaya disimpan!');
+    navigateTo('screen-studio');
+  }
+
+  // --- NAVIGASI ANTARA SKRIN ---
+  function navigateTo(screenId) {
+    playSoundClick();
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(screenId).classList.add('active');
+
+    // Kemas kini teks panduan suara mengikut skrin
+    const vText = document.getElementById('voiceText');
+    if (screenId === 'screen-home') {
+      vText.innerText = '"Selamat datang ke Pengembaraan Hutan! Pilih aktiviti untuk memulakan misi anda!"';
+    } else if (screenId === 'screen-studio') {
+      vText.innerText = '"Cipta wira haiwan anda! Anda kini boleh mengubah warna tapak tangan (paws) dan bulunya!"';
+    } else if (screenId === 'screen-friend-studio') {
+      vText.innerText = '"Cipta watak sahabat baik anda yang bakal diselamatkan dalam cerita nanti!"';
+    } else if (screenId === 'screen-video') {
+      vText.innerText = '"Tonton animasi buku cerita 7 babak dan hayati bagaimana empati merawat kesedihan!"';
+    } else if (screenId === 'screen-book') {
+      vText.innerText = '"Tuliskan janji ikrar persahabatan dan pilih pelekat comel untuk diari anda!"';
+    } else if (screenId === 'screen-quiz') {
+      vText.innerText = '"Jawab 5 soalan kuiz nilai persahabatan untuk menguji pemahaman anda!"';
+    } else if (screenId === 'screen-cave') {
+      vText.innerText = '"Sematkan 3 Kunci Empati untuk membuka pintu gua dan bebaskan kawan anda!"';
+    } else if (screenId === 'screen-cert') {
+      vText.innerText = '"Tahniah! Anda telah berjaya menamatkan misi dan layak menerima Sijil Sahabat Hebat!"';
+    }
+
+    refreshAvatars();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // --- PELANCARAN AWAL ---
+  window.addEventListener('DOMContentLoaded', () => {
+    initPalettes();
+    refreshAvatars();
+    loadChapter(0);
+    loadQuiz(0);
+    document.getElementById('certDate').innerText = new Date().toLocaleDateString('ms-MY', {
+      day: 'numeric', month: 'long', year: 'numeric'
+    });
+  });
+</script>
+</body>
+</html>
