@@ -1,0 +1,6 @@
+{
+  "name": "Pengembaraan Hutan: Misi Menyelamatkan Sahabat",
+  "description": "Aplikasi interaktif pengembaraan hutan rimba, penciptaan watak wira & sahabat, teater animasi 7 babak, kuiz persahabatan, voice over dan sokongan luar talian.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
